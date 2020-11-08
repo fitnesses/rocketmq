@@ -65,6 +65,9 @@ public class NamesrvController {
         this.nettyServerConfig = nettyServerConfig;
         this.kvConfigManager = new KVConfigManager(this);
         this.routeInfoManager = new RouteInfoManager();
+        /**
+         * 事件监听器
+         */
         this.brokerHousekeepingService = new BrokerHousekeepingService(this);
         this.configuration = new Configuration(
             log,
@@ -75,8 +78,14 @@ public class NamesrvController {
 
     public boolean initialize() {
 
+        /**
+         * 1. 加载kv
+         */
         this.kvConfigManager.load();
 
+        /**
+         * 2. Netty服务启动
+         */
         this.remotingServer = new NettyRemotingServer(this.nettyServerConfig, this.brokerHousekeepingService);
 
         this.remotingExecutor =

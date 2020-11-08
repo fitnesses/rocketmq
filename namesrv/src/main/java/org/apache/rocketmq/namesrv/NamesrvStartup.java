@@ -79,9 +79,14 @@ public class NamesrvStartup {
             return null;
         }
 
+        /**
+         * 基本的配置信息，通过netty处理网络请求
+         */
         final NamesrvConfig namesrvConfig = new NamesrvConfig();
         final NettyServerConfig nettyServerConfig = new NettyServerConfig();
         nettyServerConfig.setListenPort(9876);
+
+
         if (commandLine.hasOption('c')) {
             String file = commandLine.getOptionValue('c');
             if (file != null) {
