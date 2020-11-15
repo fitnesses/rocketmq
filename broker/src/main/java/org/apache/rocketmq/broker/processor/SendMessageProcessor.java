@@ -446,7 +446,9 @@ public class SendMessageProcessor extends AbstractSendMessageProcessor implement
             return response;
         }
         boolean sendOK = false;
-
+        /**
+         * 落盘情况
+         */
         switch (putMessageResult.getPutMessageStatus()) {
             // Success
             case PUT_OK:
