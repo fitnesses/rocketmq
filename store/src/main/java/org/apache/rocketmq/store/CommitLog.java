@@ -849,6 +849,7 @@ public class CommitLog {
                 return new PutMessageResult(PutMessageStatus.CREATE_MAPEDFILE_FAILED, null);
             }
 
+            //内存
             result = mappedFile.appendMessage(msg, this.appendMessageCallback);
             switch (result.getStatus()) {
                 case PUT_OK:
@@ -897,7 +898,9 @@ public class CommitLog {
         storeStatsService.getSinglePutMessageTopicTimesTotal(msg.getTopic()).incrementAndGet();
         storeStatsService.getSinglePutMessageTopicSizeTotal(topic).addAndGet(result.getWroteBytes());
 
+        //刷盘
         handleDiskFlush(result, putMessageResult, msg);
+        //同步
         handleHA(result, putMessageResult, msg);
 
         return putMessageResult;
@@ -1230,6 +1233,7 @@ public class CommitLog {
     }
 
     abstract class FlushCommitLogService extends ServiceThread {
+        //异步最多10秒刷一次盘
         protected static final int RETRY_TIMES_OVER = 10;
     }
 

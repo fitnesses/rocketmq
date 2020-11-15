@@ -1916,6 +1916,8 @@ public class DefaultMessageStore implements MessageStore {
 
         /**
          * commitLog -> consume queue
+         * 转发消息 mapped file内存 -》 dispatcher -》 consume queue
+         *                                      -》 index queue
          */
         private void doReput() {
             if (this.reputFromOffset < DefaultMessageStore.this.commitLog.getMinOffset()) {
