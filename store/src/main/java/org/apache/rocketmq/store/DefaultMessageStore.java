@@ -1555,6 +1555,8 @@ public class DefaultMessageStore implements MessageStore {
 
     class CommitLogDispatcherBuildConsumeQueue implements CommitLogDispatcher {
 
+        //consume queue
+
         @Override
         public void dispatch(DispatchRequest request) {
             final int tranType = MessageSysFlag.getTransactionValue(request.getSysFlag());
@@ -1571,6 +1573,8 @@ public class DefaultMessageStore implements MessageStore {
     }
 
     class CommitLogDispatcherBuildIndex implements CommitLogDispatcher {
+
+        //index file
 
         @Override
         public void dispatch(DispatchRequest request) {
@@ -1910,6 +1914,9 @@ public class DefaultMessageStore implements MessageStore {
             return this.reputFromOffset < DefaultMessageStore.this.commitLog.getMaxOffset();
         }
 
+        /**
+         * commitLog -> consume queue
+         */
         private void doReput() {
             if (this.reputFromOffset < DefaultMessageStore.this.commitLog.getMinOffset()) {
                 log.warn("The reputFromOffset={} is smaller than minPyOffset={}, this usually indicate that the dispatch behind too much and the commitlog has expired.",
@@ -1935,6 +1942,7 @@ public class DefaultMessageStore implements MessageStore {
 
                             if (dispatchRequest.isSuccess()) {
                                 if (size > 0) {
+                                    //转发
                                     DefaultMessageStore.this.doDispatch(dispatchRequest);
 
                                     if (BrokerRole.SLAVE != DefaultMessageStore.this.getMessageStoreConfig().getBrokerRole()
